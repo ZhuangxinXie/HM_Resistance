@@ -1,0 +1,35 @@
+// These codes are executed on GEE (Google Earth Engine, https://code.earthengine.google.com/)
+// Altitude affects the body size of ectotherms, including Anurans. Thus, we need to eliminate the this covariance effect.
+// ___________________________________________________________________________________________________________
+
+// ___________________________________________________________________________________________________________
+// Read csv file with only two columns: Latitude and Longitude
+var csvFile = ee.FeatureCollection('users/pointaltitude/coordination1');
+
+// Define scale level
+var scale = 30;
+
+// Import image
+var dem = ee.Image('MERIT/DEM/v1_0_3').select('dem');
+
+// Convert point list to FeatureCollection
+var points = csvFile.map(function(feature) {
+  var lon = feature.get('Longitude');
+  var lat = feature.get('Latitude');
+  var point = ee.Geometry.Point([lon, lat]);
+  return ee.Feature(point, {});
+});
+
+// Extract altitude
+var elevations = dem.reduceRegions({
+  collection: points,
+  reducer: ee.Reducer.mean(),
+  scale: scale
+});
+
+// Output
+Export.table.toDrive({
+  collection: elevations,
+  description: 'elevations',
+  fileFormat: 'CSV'
+});
