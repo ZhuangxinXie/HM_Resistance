@@ -40,7 +40,7 @@ After we acquire the `n×n` $D_{ij}$ and the `n×n` $P_{ij}$, a dot product of b
 
 ### Revision
 Our research partly focuses on the HMs effects on the Anuran body size `BS`. Considering it is well proved that there are some covariance (including `latitude`, `altitude` and `sex`) impacting their body size, we should eliminate the covariance impacts with<br>
-<p align="center">$log BS_{Revised} = log BS_{Original} - (β_1 × latitude + β_2 × altitude + β_3 × sex)$<p>
+<p align="center">$log_a BS_{Revised} = log_a BS_{Original} - (β_1 × latitude + β_2 × altitude + β_3 × sex)$<p>
 
 ## `Body_Size.py`<br>
 In part 1 of Results, we focus on the global latitudinal `BS` distribution patterns.<br>
@@ -61,4 +61,9 @@ After reviewing, we only select seven `HMs` that are obserrved they change the b
 Parallelly, we apply `Quadratic Rgression` to fit the latitudinal distribution patterns of the selected HMs and plot their correspongding geological distribution map.<br>
 
 ## `Quantile.py`<br>
+### Quantile Regression
 
+
+### PCA
+
+### 
