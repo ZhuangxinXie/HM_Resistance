@@ -1,0 +1,125 @@
+// These codes are executed on GEE (Google Earth Engine, https://code.earthengine.google.com/).
+// It has been proved that the climate may affect the Anuran body size. To acquire the climate date of all sites, here we present the codes to extract the climate data, including
+//    aet   (0.1   mm): Actual evapotranspiration, derived using a one-dimensional soil water balance model,
+//    def   (0.1   mm): Climate water deficit, derived using a one-dimensional soil water balance model,
+//    pdsi  (0.01    ): Palmer Drought Severity Index,
+//    pet   (0.1   mm): Reference evapotranspiration (ASCE Penman-Montieth),
+//    pr    (1     mm): Precipitation accumulation,
+//    ro    (1     mm): Runoff, derived using a one-dimensional soil water balance model,
+//    soil  (0.1   mm): Soil moisture, derived using a one-dimensional soil water balance model,
+//    srad(0.1  W/m^2):	Downward surface shortwave radiation,
+//    swe   (1     mm): Snow water equivalent, derived using a one-dimensional soil water balance model,
+//    tmmn  (0.1   °C): Minimum temperature,
+//    tmmx  (0.1   °C): Maximum temperature,
+//    vap   (0.001kPa): Vapor pressure,
+//    vpd   (0.001kPa): Vapor pressure deficit,
+//    vs    (0.01 m/s): Wind-speed at 10m,
+// For more details, see
+// ______________________________________________________________________________________________________
+// Abatzoglou, J.T., S.Z. Dobrowski, S.A. Parks, K.C. Hegewisch, 2018, Terraclimate, a high-resolution global dataset of monthly climate and climatic water balance from 1958-2015, Scientific Data 5:170191, doi:10.1038/sdata.2017.191
+// ______________________________________________________________________________________________________
+
+// ______________________________________________________________________________________________________
+// Import site coordinates file in csv format (with three columns, including "Longitude", "Latitude" and "site_name"). The variable is named after 'sitesTable'
+var sitesTable = ....
+ 
+// Convert the table to a point collection
+var sites = sitesTable.map(function(feature) {
+  var lon = feature.get('Longitude');
+  var lat = feature.get('Latitude');
+  var point = ee.Geometry.Point([lon, lat]);
+  return ee.Feature(point, {
+    'site_name': feature.get('site_name')
+  });
+});
+
+// Define data collection and studied period
+var terraClimate = ee.ImageCollection("IDAHO_EPSCOR/TERRACLIMATE")
+  .filterDate('1972-01-01', '2023-12-31');
+
+// Define variables and scale factors (due to the values in the images may be presented as integer in case of float format data)
+var variables = [
+  {name: 'aet', unit: 'mm', scale: 10, desc: 'Actual_Evapotranspiration'},
+  {name: 'def', unit: 'mm', scale: 10, desc: 'Climate_Water_Deficit'},
+  {name: 'pdsi', unit: '', scale: 100, desc: 'Palmer_Drought_Severity_Index'},
+  {name: 'pet', unit: 'mm', scale: 10, desc: 'Reference_Evapotranspiration'},
+  {name: 'pr', unit: 'mm', scale: 1, desc: 'Precipitation_Accumulation'},
+  {name: 'ro', unit: 'mm', scale: 1, desc: 'Runoff'},
+  {name: 'soil', unit: 'mm', scale: 10, desc: 'Soil_Moisture'},
+  {name: 'srad', unit: 'W/m2', scale: 10, desc: 'Downward_Surface_Shortwave_Radiation'},
+  {name: 'swe', unit: 'mm', scale: 1, desc: 'Snow_Water_Equivalent'},
+  {name: 'tmmn', unit: '°C', scale: 10, desc: 'Minimum_Temperature'},
+  {name: 'tmmx', unit: '°C', scale: 10, desc: 'Maximum_Temperature'},
+  {name: 'vap', unit: 'kPa', scale: 1000, desc: 'Vapor_Pressure'},
+  {name: 'vpd', unit: 'kPa', scale: 100, desc: 'Vapor_Pressure_Deficit'},
+  {name: 'vs', unit: 'm/s', scale: 100, desc: 'Wind_Speed_At_10m'}
+];
+
+// Define required statistic
+var stats = ['mean', 'min', 'max', 'median', 'stdDev'];
+
+// A function used to get statistic of a single site
+var processSite = function(site) {
+  var point = site.geometry();
+  var siteName = site.get('site_name');
+  var result = {site_name: siteName};
+  
+  // Get values of this certain site
+  var siteData = terraClimate.filterBounds(point);
+  
+  // Extract each statistic
+  variables.forEach(function(varInfo) {
+    var imgStats = siteData.select(varInfo.name).reduce(
+      ee.Reducer.mean().combine({
+        reducer2: ee.Reducer.min(),
+        sharedInputs: true
+      }).combine({
+        reducer2: ee.Reducer.max(),
+        sharedInputs: true
+      }).combine({
+        reducer2: ee.Reducer.median(),
+        sharedInputs: true
+      }).combine({
+        reducer2: ee.Reducer.stdDev(),
+        sharedInputs: true
+      })
+    );
+    
+    // Extract values
+    var pointVal = imgStats.reduceRegion({
+      reducer: ee.Reducer.first(),
+      geometry: point,
+      scale: 1000
+    });
+    
+    // Store all statistic
+    stats.forEach(function(stat) {
+      var key = varInfo.desc + '_' + stat;
+      result[key] = ee.Number(pointVal.get(varInfo.name + '_' + stat)).divide(varInfo.scale);
+    });
+  });
+  
+  return ee.Feature(null, result);
+};
+
+// Process all sites
+var allSitesStats = sites.map(processSite);
+
+// Print results
+print("Climate statistics for all sites:", allSitesStats);
+
+// Setting
+var selectors = ['site_name'];
+variables.forEach(function(varInfo) {
+  stats.forEach(function(stat) {
+    selectors.push(varInfo.desc + '_' + stat);
+  });
+});
+
+// Export to Google Drive
+Export.table.toDrive({
+  collection: allSitesStats,
+  description: 'MultiSites_Climate_Statistics_1972_2023',
+  fileFormat: 'CSV',
+  selectors: selectors
+});
