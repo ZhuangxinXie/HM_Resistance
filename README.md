@@ -23,9 +23,24 @@ The `Fundamental Data` include:<br>
 >Chordplot.xlsx<br>
 
 ## `GEE Codes`<br>
-Considering some covariances of the physical environment (such as `Alutitude`, `Latitude`, `Sex`, `Precipitation`, `Temperature` and `Evaporation`) impact the Anuran body size, here we should collect these related values of the sample sites. We need to prepare a table of coordinates by copying from the raw data file with columns including `Latitude`, `Longitude` and `site_name`. Ater this, upload this table to GEE (Google Earth Engine).
+Considering some covariances of the physical environment (such as `Alutitude`, `Latitude`, `Sex`, `Precipitation`, `Temperature` and `Evaporation`) impact the Anuran body size, here we should collect these related values of the sample sites. We need to prepare a table of coordinates by copying from the raw data file with columns including `Latitude`, `Longitude` and `site_name`. Ater this, upload this table to GEE (Google Earth Engine).<br>
 ### Extract_Altitude
+>Load the table<br>
+```
+var csvFile = ee.FeatureCollection("Your table path on GEE");
+```
+>Run the code.<br>
+>Download the csv file from your `Google Drive` manually<br>
+“`markdown
+|Name    |Unit    |Min   |Max   |Scale   |Description   |
+|:——|:——|:—–|:—–|:—–|:—–|
+| 内容1  | 内容2  | 内容3 | 内容4  | 内容5  | 内容6 |
+“`
+### Extract_Climate
+>Load the table<br>
+>Here we will extract all possible covariances<br>
 
+>
 
 ## `Preprocess.py`<br>
 ### Transformation
