@@ -3,8 +3,12 @@ Environmental Heavy Metals Alter Life History
 
 Anuran body size impacts the their reproduction, potentially manipulating their sustainability. However, their sustainability may be threatened by the wide occurrence of environmental heavy metals (HMs) in aquatic environment. Here we utilized data mining to analyze the global distribution patterns and the relationship between HMs bioaccumulation and body size. As a result, we find both a hot spot of small body size and a cold spot of high HMs bioaccumulation occur around 20°N, with low correlation to the species difference. According to this difference, the samples were divided into two groups that high bioaccumulation group appears smaller sizes while another one appears larger sizes. This difference may be attributed more to the evolution, not the plasticity. Here we conclude that the high HM loads have altered their sustaining strategies that they distribute more energy to detoxify with the price of shrinking body.<br>
 
-Our repository consists of `Python Codes` and `Fundamental Data`.<br>
+Our repository consists of `GEE Codes`, `Python Codes` and `Fundamental Data`.<br>
 ------------------------------------------------------------
+The `GEE Codes` include:<br>
+>Extract_Altitude<br>
+>Extract_Climate<br>
+
 The `Python Codes` include:<br>
 >Preprocess.py<br>
 >Body_Size.py<br>
@@ -17,7 +21,12 @@ The `Fundamental Data` include:<br>
 >Taxonomy.xlsx<br>
 >Continent.xlsx<br>
 >Chordplot.xlsx<br>
-    
+
+## `GEE Codes`<br>
+Considering some covariances of the physical environment (such as `Alutitude`, `Latitude`, `Sex`, `Precipitation`, `Temperature` and `Evaporation`) impact the Anuran body size, here we should collect these related values of the sample sites. We need to prepare a table of coordinates by copying from the raw data file with columns including `Latitude`, `Longitude` and `site_name`. Ater this, upload this table to GEE (Google Earth Engine).
+### Extract_Altitude
+
+
 ## `Preprocess.py`<br>
 ### Transformation
 Before imputation, we have tested that all body size `BS` features, including `Snout-vent Length(SVL)`, `Body Mass(BM)` and `Condition Factor(CF)`, and bioaccumulated heavy metals are right-skewed. Therefore we applied logarithm transformation to normalize the data.<br>
