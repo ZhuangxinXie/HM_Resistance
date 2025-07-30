@@ -672,8 +672,26 @@ We use $K_{multi}$ to dipict the evolutionary difference of each group.<br>
 
 
 _____________________________________________________
-For more details, please contact via zxxie@iue.ac.cn
+## Environment
+We executed all python code with Python 3.12.<br>
+The related python packages and their versions are listed as follow.<br>
 
+>numpy version 1.26.4<br>
+>pandas version 2.2.2<br>
+>biopython version 1.85<br>
+>tqdm version 4.66.5<br>
+>matplotlib version 3.9.2<br>
+>fancyimpute version 0.7.0<br>
+>sciki-learn version 1.5.1<br>
+>geopandas version 1.0.1<br>
+>seaborn version 0.11.0<br>
+>pillow version 10.4.0<br>
+>mpl_chord_diagram version 0.4.1<br>
+>openpyxl version 3.1.5<br>
+>scipy version 1.13.1<br>
+
+
+For more details, please contact via zxxie@iue.ac.cn
 
 
 
