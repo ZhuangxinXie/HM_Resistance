@@ -179,13 +179,13 @@ def k_multi(tree, Y):
 		    _______________________
 			(Y-E(Y))^T·C^-1·(Y-E(Y))
 	K =	_________________________________
-			(tr(C)-N(1^T·C^-1·1)^-1)
+			(tr(C)-N(I^T·C^-1·I)^-1)
 			________________________
 					  (N-1)
 
 	where
 		Y: A matrix with multiple features (index: species, column: features)
-		E(Y): Expected value at the root of the phylogeny. It equals to (1^T·C^-1·1)^(-1)·(1^T·C^-1·1)
+		E(Y): Expected value at the root of the phylogeny. It equals to (I^T·C^-1·I)^(-1)·(I^T·C^-1·I)
 		tr(C): Trace of a covariance matrix
 		N: Number of species
 		1: A one-like matrix
@@ -1220,3 +1220,4 @@ if __name__ == "__main__":
 	         n_clusters=4,                          # The number of clustered groups
 	         data_date=date,                        # The date that the preprocessed data was generated
 	         feature="CF")                          # The topic body size feature
+
