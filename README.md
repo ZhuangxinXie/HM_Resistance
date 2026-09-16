@@ -1,4 +1,4 @@
-Ideal trans-generational resistance degradation under heavy metals pressure
+Ideal trans-generational resistance degradation under heavy metals pressure (Updating...)
 =============================================
 
 Anuran body size impacts the their reproduction, potentially manipulating their sustainability. However, their sustainability may be threatened by the wide occurrence of environmental heavy metals (HMs) in aquatic environment. Here we utilized data mining to analyze the global distribution patterns and the relationship between HMs bioaccumulation and body size. As a result, we find both a hot spot of small body size and a cold spot of high HMs bioaccumulation occur around 20°N, with low correlation to the species difference. According to this difference, the samples were divided into two groups that high bioaccumulation group appears smaller sizes while another one appears larger sizes. This difference may be attributed more to the evolution, not the plasticity. Here we conclude that the high HM loads have altered their sustaining strategies that they distribute more energy to detoxify with the price of shrinking body.<br>
@@ -566,14 +566,27 @@ We used `Polynomial Regression` to fit the data derived from `Preprocess.py`.<br
 Secondly, to visualize to geological distribution of `CF`, we plot the `CF` sactters on a world map.<br>
 Moran'I was used to find the local minimum or maximum value of `CF` and the involved `HMs`.<br>
 
-```
-Intraspecific trait variance (ITV) indicates the trait variance.
-We use this parameter to show the plasticity difference among different sample sites, shown in the supplementary materials.
-```
+
 
 ## `Heavy_Metal.py`<br>
-After reviewing literature, we found `HMs` that were reported with the effects of changing the body size. To reduce the demension of our data, Geo-detector was used to select the `HMs` that had significant explanatory power to `CF`. As a result, this stud included `As`, `Ag`, `Ba`, `Be`, `Bi`, `MeHg`, `Se`, `Sn`, `Tl` and `U`.<br>
-Parallelly, we apply `Polynomial Rgression` to fit the latitudinal distribution patterns of the selected `HMs` and plot their correspongding geological distribution map.<br>
+T-SNE was used to cluster groups that exhibit distinct `CF` and `HMs` divergence.<br>
+
+To reduce the demension of our data, Geo-detector was used to select the variables that had significant explanatory power (> 0.300) to trait divergence. The following variables were selected:<br>
+`As`: Arsenic<br>
+`Ag`: Argentum<br>
+`Ba`: Barium<br>
+`Be`: Beryllium<br>
+`Bi`: Bismuth<br>
+`MeHg`: Methyl mercury<br>
+`Se`: Selenium<br>
+`Sn`: Stannum<br>
+`Tl`: Thallium<br>
+`U`: Uranium<br>
+`ITV`: Intraspecific trait variance. We remain this parameter to show the trait variance in spite of lower-than-0.3 explanatory power<br>
+
+
+
+To explore the relation
 
 ## `Quantile.py`<br>
 ### Quantile Regression
