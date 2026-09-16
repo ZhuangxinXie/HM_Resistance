@@ -1,4 +1,4 @@
-Anuran life history evolution converges under heavy metal pressure
+Ideal trans-generational resistance degradation under heavy metals pressure
 =============================================
 
 Anuran body size impacts the their reproduction, potentially manipulating their sustainability. However, their sustainability may be threatened by the wide occurrence of environmental heavy metals (HMs) in aquatic environment. Here we utilized data mining to analyze the global distribution patterns and the relationship between HMs bioaccumulation and body size. As a result, we find both a hot spot of small body size and a cold spot of high HMs bioaccumulation occur around 20°N, with low correlation to the species difference. According to this difference, the samples were divided into two groups that high bioaccumulation group appears smaller sizes while another one appears larger sizes. This difference may be attributed more to the evolution, not the plasticity. Here we conclude that the high HM loads have altered their sustaining strategies that they distribute more energy to detoxify with the price of shrinking body.<br>
@@ -538,7 +538,7 @@ Before imputation, we have tested that all body size `BS` features, including `S
 Our original data `raw_data.xlsx` with `n` rows were collected from the previous articles. Given that there are many empty cells in this file, we used our `Phylo-KNN` to impute the null cells.<br>
 <br>
 * KNN<br>
-KNN clusters the current data according to the distance $d_{ij}$ between the sample pairs.<br>
+KNN clusters the current data according to the distance $S_{i,j}$ between the sample pairs.<br>
 Here $s_i$ and $s_j$ represent two samples. When $i = j$, both samples are the same (that is $d_{ij} = 0$).<br>
 After this, we will get a `n×n` distance matrix $D_{ij}$<br>
 * Phylo-KNN<br>
@@ -546,31 +546,34 @@ However, the way that KNN clusters samples may not capture the phylogenetic diff
 Therefore we develop a `Phylo-KNN` to capture the phylogenetic features by adding a `n×n` phylogenetic distance matrix $P_{ij}$.<br>
 Here $p_{ij}$ refers to the distance from the phylogenetic root to the common ancestor `MRCA` of species `i` and species `j`.<br>
 After we acquire the `n×n` $D_{ij}$ and the `n×n` $P_{ij}$, a dot product of both matrix will be used as a revised sample distance matrix.<br>
-<p align="center">$d_{ij} = (\sum |s_i - s_j|^p)^{\frac{1}{p}}$<p>
-<p align="center">$D_{ij} = (S_{ij})$<p>
-<p align="center">$P_{ij} = (p_{ij})$<p>
+<p align="center">$S_{i,j} = (\sum |S_i - S_j|^p)^{\frac{1}{p}}$<p>
+<p align="center">$D = (S_{i,j})$<p>
+<p align="center">$C = (d_{ij})$<p>
+<p align="center">$D_{Revised} = D·C$<p>
 
 ### Revision
 Our research partially focuses on the HM effects on the Anuran body size `BS`. Considering it is well proved that there are some covariance (including `latitude`, `altitude` and `sex`) impacting their body size, we should eliminate the covariance impacts with<br>
-<p align="center">$log_a BS_{Revised} = log_a BS_{Original} - (β_1 × latitude + β_2 × altitude + β_3 × sex)$<p>
+<p align="center">$log_{10} Body Size_{Calibrated} = log_{10} Body Size_{Original} - (β_L × Latitude + β_A × Altitude + β_3 × sex)$<p>
 
 ## `Body_Size.py`<br>
-In part 1 of Results, we focus on the global latitudinal `BS` distribution patterns.<br>
-### Scatter Plot
-Firstly we illustrate scatter plots with x and y axes referring to `BS` and `latitude`.<br>
-We assume that these distribution patterns should be symmetric along the equator. To capture the symmetric features, we use `Quadratic Regression` to fit the data derived from `Preprocess.py`.<br>
+In part 1 of Results, we focus on the global latitudinal `CF` distribution patterns.<br>
+### Latitudinal distribution patterns of condition factor
+Firstly we illustrate scatter plots with x and y axes referring to `CF` and `latitude`.<br>
+We used `Polynomial Regression` to fit the data derived from `Preprocess.py`.<br>
+`Quantile Regression` (q1 = 0.05, q2 = 0.95) was used to quantify the marginal change patterns of `CF~Latitude`.<br>
 
-### World Map
-Secondly, to visualize to geological distribution of `BS`, we plot the `BS` sactters on a world map.<br>
+### Worldwide distribution of condition factor
+Secondly, to visualize to geological distribution of `CF`, we plot the `CF` sactters on a world map.<br>
+Moran'I was used to find the local minimum or maximum value of `CF` and the involved `HMs`.<br>
 
 ```
-Intraspecific trait variance (ITV) indicates the trait variance (that is, trait plasticity).
+Intraspecific trait variance (ITV) indicates the trait variance.
 We use this parameter to show the plasticity difference among different sample sites, shown in the supplementary materials.
 ```
 
 ## `Heavy_Metal.py`<br>
-After reviewing literature, we only select seven `HMs` that are obserrved they change the body size, including `Cd`, `Cr`, `Cu`, `Fe`, `Hg`, `Mn`, `Pb` and `Zn`.<br>
-Parallelly, we apply `Quadratic Rgression` to fit the latitudinal distribution patterns of the selected HMs and plot their correspongding geological distribution map.<br>
+After reviewing literature, we found `HMs` that were reported with the effects of changing the body size. To reduce the demension of our data, Geo-detector was used to select the `HMs` that had significant explanatory power to `CF`. As a result, this stud included `As`, `Ag`, `Ba`, `Be`, `Bi`, `MeHg`, `Se`, `Sn`, `Tl` and `U`.<br>
+Parallelly, we apply `Polynomial Rgression` to fit the latitudinal distribution patterns of the selected `HMs` and plot their correspongding geological distribution map.<br>
 
 ## `Quantile.py`<br>
 ### Quantile Regression
